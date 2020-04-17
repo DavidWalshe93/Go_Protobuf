@@ -4,6 +4,8 @@
 package main
 
 import (
+	complexpb "GoProtoBuffer/src/complex"
+	enumpb "GoProtoBuffer/src/enum"
 	simplepb "GoProtoBuffer/src/simple"
 	"fmt"
 	"github.com/golang/protobuf/jsonpb"
@@ -12,10 +14,67 @@ import (
 )
 
 func main() {
+
+	// Simple Demo
+	// ===========
 	sm := createProtoBuffer()
 	readAndWriteDemo(sm)
 	jsonDemo(sm)
+
+	// Enum Demo
+	// =========
+	ep := createEnum()
+	fmt.Println(ep)
+
+	// Complex Demo
+	// ============
+	cp := createComplexProtoBuf()
+	fmt.Println(cp)
 }
+
+// *********************************************************************************************************************
+// Complex
+// *********************************************************************************************************************
+
+// Create an Hierarchical Protobuf construct.
+func createComplexProtoBuf() *complexpb.ComplexMessage {
+	cp := complexpb.ComplexMessage{
+		OneDummy: &complexpb.DummyMessage{
+			Id:   1,
+			Name: "First message",
+		},
+		MultipleDummy: []*complexpb.DummyMessage{
+			&complexpb.DummyMessage{
+				Id:   2,
+				Name: "Second message",
+			},
+			&complexpb.DummyMessage{
+				Id:   3,
+				Name: "Third message",
+			},
+		},
+	}
+
+	return &cp
+}
+
+// *********************************************************************************************************************
+// Enum
+// *********************************************************************************************************************
+
+// Create a ProtoBuf with an Enum construct.
+func createEnum() *enumpb.EnumMessage {
+	ep := enumpb.EnumMessage{
+		Id:           42,
+		DayOfTheWeek: enumpb.DayOfTheWeek_THURSDAY,
+	}
+
+	return &ep
+}
+
+// *********************************************************************************************************************
+// Simple
+// *********************************************************************************************************************
 
 // Helper method to show to/from JSON functionality.
 func jsonDemo(pb proto.Message) {
